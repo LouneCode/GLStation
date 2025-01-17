@@ -60,7 +60,7 @@ GLStation gateways enable large-scale network expansion with a multi-hop network
 GLStation gateways create a robust and scalable network by leveraging multi-hop transmission. This approach enhances communication distance, signal penetration, and overall network efficiency.
 
 <figure>
-    <img src="pic\mesh_architecture.svg" alt="GLStation"  width=800>
+    <img src="pic/mesh_architecture.svg" alt="GLStation"  width=800>
 </figure>
 
  Please refer to the [GLStation Mesh](./GLStation_MESH.md) documentation to learn more about the features provided.

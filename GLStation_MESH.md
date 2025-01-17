@@ -16,7 +16,7 @@ The GLStation role in the LoRaWAN network can be easily configured by selecting 
 
 </BR>
 
-![Mesh](pic\mesh_architecture.svg)
+![Mesh](pic/mesh_architecture.svg)
 
 </BR>
 
