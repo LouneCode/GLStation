@@ -1,5 +1,5 @@
 # GLStation SX1303 - Setup guide
-[GLStation SX1303 - LoRaWAN Base Station](./README.md) | [GLStation firmware](./INSTALL_FIRMWARE.md) | [GLStation Setup](./GLStation_SETUP.md)
+[GLStation SX1303 - LoRaWAN Base Station](./README.md) | [GLStation hardware](./INSTALL_HARDWARE.md) | [GLStation firmware](./INSTALL_FIRMWARE.md) | [GLStation Setup](./GLStation_SETUP.md) | [GLStation Mesh](./GLStation_MESH.md)
 
 </BR>
 
@@ -27,9 +27,50 @@ This document is a description how to set up the GLStation.
 
 GLStation runs on ``Alpine linux``, so now on is assumed that all commands will be done on a Linux terminal. GLStation has the ``sudo`` security system that enables users to run programs with the security privileges. Admin command should have ``sudo`` prefix to run command as the root user. For example stop gls-mqtt-forwarder service on the system.
 
+</BR>
+
+## ``TL;DR`` Minimun setup of the gateway 
+This is minimum task list what has to do to get system up. system will usethe DHCP addresses.     
+
 ```
-$ sudo rc-service gls-mqtt-forwarder stop
+# -- Change password
+$ sudo passwd glsbase
+
+# -- Set host
+$ sudo nano /etc/hosts
+$ sudo nano /etc/hostname
+$ sudo hostname -F /etc/hostname
+
+# -- Set WLAN ssid and password
+$ sudo sh -c 'wpa_passphrase "GLStationWiFi" "dontTellMama" > /etc/wpa_supplicant/wpa_supplicant.conf'
+
+# -- Check
+$ sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+
+# -- Restart WLAN
+$ sudo rc-service wpa_supplicant restart
+
+# -- Check
+$ dmesg
+
+# -- Set MQTT host for Gateway and Border Gateway modes
+$ sudo nano /etc/conf.d/gls-mqtt-forwarder
+$ sudo nano /etc/conf.d/gls-mqtt-forwarder-border-gw
+
+# -- Restart gateway services
+#   -g      Gateway mode
+#   -b      Border Gateway mode
+#   -r      Relay Gateway Mode
+
+$ sudo ./set_gateway_mode.sh -g
+
+# -- Check Gateway logs (quit: ctrl + c)
+$ tail -f /var/log/*
+
+# -- Test Reboot of the gateway
+$ sudo reboot now
 ```
+After that fast setup it also good to set at least the time zone and the ntp servers.
 
 </BR>
 
@@ -44,7 +85,12 @@ $ ssh -p2210 glsbase@[host IP address]
 ```
 
 
-Change user glsbase password. 
+
+Change user glsbase password. Initial username and password:
+<ul>
+    <li><b>Username:</b> glsbase </li>
+    <li><b>Password:</b> change-th1s-n0w!</li>
+</ul> 
 
 ```
 $ sudo passwd glsbase
@@ -177,7 +223,7 @@ $ sudo rc-service wpa_supplicant restart
 $ dmesg
 ```
 
-> **Please,** </BR> see the more details about WLAN on the[Alpine - wpa_supplicant][6] guide.
+> **Please,** </BR> see the more details about WLAN on the [Alpine - wpa_supplicant][6] guide.
 
 </BR>
 
@@ -337,6 +383,7 @@ GLStation truncates the following logs every hour. Maximum log size is set to 10
 - /var/log/gls-mqtt-forwarder.log
 - /var/log/gls-concentratord.log
 - /var/log/gls-bt-gatt.log
+- /var/log/gls-gateway-mesh.log
 
 The Crontab log cleaning scrip is in ``/etc/periodic/hourly`` folder.
 
@@ -379,10 +426,15 @@ sudo rc-service gls-concentratord start
 
 ## gls-mqtt-forwarder
 
-MQTT server (e.g. scheme://host:port where scheme is tcp, ssl or ws) address is defined in the ``/etc/conf.d/gls-mqtt-forwarder`` file. 
+MQTT server (e.g. scheme://host:port where scheme is tcp, ssl or ws) address is defined in the files above.
+-  ``/etc/conf.d/gls-mqtt-forwarder``
+- ``/etc/conf.d/gls-mqtt-forwarder-border-gw``
+
+</BR>
 
 ```
 $ sudo nano /etc/conf.d/gls-mqtt-forwarder
+$ sudo nano /etc/conf.d/gls-mqtt-forwarder-border-gw
 ```
 For example:
 ```
@@ -468,6 +520,11 @@ $ sudo btmon -i hci0
 
 </BR>
 
+## Next step - GLStation goes Mesh
+[**GLStation Mesh**](./GLStation_MESH.md)
+
+</BR>
+
 </BR>
 
 </BR>
@@ -502,6 +559,7 @@ $ sudo btmon -i hci0
 - [GLStation SX1303 - LoRaWAN Base Station](./README.md) guide.
 - [GLStation firmware](./INSTALL_FIRMWARE.md) installation guide.
 - [GLStation Setup](./GLStation_SETUP.md) guide.
+- [GLStation Mesh](./GLStation_MESH.md)
 
 </BR>
 </BR>

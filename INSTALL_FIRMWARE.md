@@ -1,5 +1,5 @@
 # GLStation SX1303 - Firmware installation
-[GLStation SX1303 - LoRaWAN Base Station](./README.md) | [GLStation firmware](./INSTALL_FIRMWARE.md) | [GLStation Setup](./GLStation_SETUP.md)
+[GLStation SX1303 - LoRaWAN Base Station](./README.md) | [GLStation hardware](./INSTALL_HARDWARE.md) | [GLStation firmware](./INSTALL_FIRMWARE.md) | [GLStation Setup](./GLStation_SETUP.md) | [GLStation Mesh](./GLStation_MESH.md)
 
 
 </BR>
@@ -216,6 +216,7 @@ GLStation adapter has a TTL 3V3 pins for serial console port.
 - [GLStation SX1303 - LoRaWAN Base Station](./README.md) guide.
 - [GLStation firmware](./INSTALL_FIRMWARE.md) installation guide.
 - [GLStation Setup](./GLStation_SETUP.md) guide.
+- [GLStation Mesh](./GLStation_MESH.md)
 
 </BR>
 </BR>
