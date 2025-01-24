@@ -30,7 +30,7 @@ GLStation runs on ``Alpine linux``, so now on is assumed that all commands will 
 </BR>
 
 ## ``TL;DR`` Minimum setup of the gateway 
-This is minimum task list what has to do to get system up. system will usethe DHCP addresses.     
+This is minimum task list what has to do to get system up. system will use the DHCP addresses.     
 
 ```
 # -- Change password

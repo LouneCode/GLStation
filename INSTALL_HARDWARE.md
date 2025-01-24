@@ -42,7 +42,7 @@ Start installation with the ``HT1303 concentrator module`` and the ``LR1302 868M
 
 <figure>
     <img src="https://www.elecrow.com/wiki/image/thumb/a/ad/LR1302_LoRaWAN_HAT-1.png/600px-LR1302_LoRaWAN_HAT-1.png" alt="LR1302 868M LoRaWAN hat"  width="600">
-    <figcaption>Please, see more details in <a href="https://heltec.org/project/ht1303/" target="_blank">LR1302 868M LoRaWAN hat</a></figcaption>
+    <figcaption>Please, see more details in <a href="https://www.elecrow.com/wiki/lr1302-lorawan-hat-for-rpi-prd.html" target="_blank">LR1302 868M LoRaWAN hat</a></figcaption>
 </figure>
 
 </BR>

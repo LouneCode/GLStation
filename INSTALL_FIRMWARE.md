@@ -136,13 +136,14 @@ cat /proc/net/arp | xargs -I {} echo {}| awk '{print $1}' | xargs -I {} ping -w1
 
 ``GLStation Bluetooth connection browser app``
 
-Third option is to use the experimental Bluetooth browser application to connect GLStation GATT server and find out near field GLStation nodes. Application list nodes as follows: 
+Third option is to use the experimental tool in ``GLSensor tracker`` browser application to connect GLStation GATT server and find out near field GLStation nodes. Application list nodes as follows: 
 
 ```
 station-001: ssh -p2210 glsbase@192.168.1.100
 station-002: ssh -p2210 glsbase@192.168.1.101
 station-003: ssh -p2210 glsbase@192.168.1.102
 ```
+![GLStationBT](pic/bt_scanner.png)
 
 However, this application is still under development at the time of writing this document.
 
