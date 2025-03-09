@@ -384,6 +384,12 @@ GLStation truncates the following logs every hour. Maximum log size is set to 10
 - /var/log/gls-concentratord.log
 - /var/log/gls-bt-gatt.log
 - /var/log/gls-gateway-mesh.log
+- /var/log/auth.log ``syslog-ng``
+- /var/log/cron.log ``syslog-ng``
+- /var/log/error.log ``syslog-ng``
+- /var/log/kern.log ``syslog-ng``
+- /var/log/mail.log ``syslog-ng``
+- /var/log/messages ``syslog-ng``
 
 The Crontab log cleaning scrip is in ``/etc/periodic/hourly`` folder.
 
@@ -516,6 +522,12 @@ $ sudo /usr/local/bin/gateway-id
 The btmon command provides access to the Bluetooth subsystem monitor infrastructure for reading HCI traces.
 ```
 $ sudo btmon -i hci0
+```
+
+The mDNS avahi-tools. Find for example GLStations local addresses.
+
+```
+$ avahi-browse --browse-domains  --all --resolve --ignore-local  --terminate
 ```
 
 </BR>

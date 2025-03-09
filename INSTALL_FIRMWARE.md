@@ -72,6 +72,7 @@ $ sudo passwd glsbase
 <ul> 
     <li>DHCP - GLStation uses dynamic network configuration on <b>eth0</b> and <b>wlan0</b> network interfaces. Both interfaces are on by default</li>
     <li>Bluetooth is on by default for GATT server connections</li>
+    <li>mDNS for resolving GLStation hosts in local network</li>
     <!--li></li-->
 </ul> 
 
@@ -86,6 +87,53 @@ Connect SSH terminal on the port 2210.
 ```
 ssh -p2210 glsbase@[host IP address]
 ```
+Or using local host names (mDNS).
+```
+ssh -p2210 glsbase@station-000.local
+```
+
+``Windows terminal`` and mDNS resolver.
+
+```
+PS> Resolve-DnsName station-000.local
+
+Name                                           Type   TTL   Section    IPAddress
+----                                           ----   ---   -------    ---------
+station-000.local                              A      120   Answer     192.168.1.70
+```
+
+``Linux`` 
+Avahi-tools package should be installed on the system. 
+```
+avahi-browse --browse-domains --all --resolve --ignore-local --terminate
+
++   eth0 IPv4 station-002                                   SFTP File Transfer   local
++   eth0 IPv4 station-003                                   SFTP File Transfer   local
++   eth0 IPv4 station-002                                   SSH Remote Terminal  local
++   eth0 IPv4 station-003                                   SSH Remote Terminal  local
+=   eth0 IPv4 station-002                                   SSH Remote Terminal  local
+   hostname = [station-002.local]
+   address = [192.168.1.10]
+   port = [22]
+   txt = []
+=   eth0 IPv4 station-002                                   SFTP File Transfer   local
+   hostname = [station-002.local]
+   address = [192.168.1.10]
+   port = [22]
+   txt = []
+=   eth0 IPv4 station-003                                   SSH Remote Terminal  local
+   hostname = [station-003.local]
+   address = [192.168.1.20]
+   port = [22]
+   txt = []
+=   eth0 IPv4 station-003                                   SFTP File Transfer   local
+   hostname = [station-003.local]
+   address = [192.168.1.20]
+   port = [22]
+   txt = []
+```
+
+
 
 </BR>
 
@@ -144,8 +192,6 @@ station-002: ssh -p2210 glsbase@192.168.1.101
 station-003: ssh -p2210 glsbase@192.168.1.102
 ```
 ![GLStationBT](pic/bt_scanner.png)
-
-However, this application is still under development at the time of writing this document.
 
 </BR>
 
