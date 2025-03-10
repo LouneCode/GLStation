@@ -32,7 +32,7 @@ Windows and Linux tools can also be downloaded from [LuckfoxTECH/luckfox-pico](h
 
 ### installation steps
 <ol>
-  <li>Download <a href="https://github.com/LouneCode/GLStation/blob/main/firmware/GLStation_firmware.zip" download>GLStation_firmware</a>.</li>
+  <li>Download <a href="https://github.com/LouneCode/GLStation/releases/download/v0.1.0/GLStation_firmware.zip" download>GLStation_firmware</a>.</li>
   <li>Unzip the GLStation_firmware.zip file</li>
   <li>On windows, run the flashing tool -  SocToolKit.exe</li>
   <li>Flashing tool - On Chip selection dialog / Chip support list, select <b>RV1106</b> option. </li>
