@@ -1,7 +1,7 @@
-# GLStation SX1303 - Setup guide
+<BR/># GLStation SX1303 - Setup guide
 [GLStation SX1303 - LoRaWAN Base Station](./README.md) | [GLStation hardware](./INSTALL_HARDWARE.md) | [GLStation firmware](./INSTALL_FIRMWARE.md) | [GLStation Setup](./GLStation_SETUP.md) | [GLStation Mesh](./GLStation_MESH.md)
 
-</BR>
+<BR/>
 
 This document is a description how to set up the GLStation.
 
@@ -9,6 +9,8 @@ This document is a description how to set up the GLStation.
 - Change password of the ``glsbase`` user
 - Host name
 - Network configurations
+- Awall - firewall
+- Syslog-ng
 - Open-RC services on GLStation
 - Time zone settings
 - ntpd setup
@@ -23,11 +25,11 @@ This document is a description how to set up the GLStation.
 - Gateway id
 - tools
 
-</BR>
+<BR/>
 
 GLStation runs on ``Alpine linux``, so now on is assumed that all commands will be done on a Linux terminal. GLStation has the ``sudo`` security system that enables users to run programs with the security privileges. Admin command should have ``sudo`` prefix to run command as the root user. For example stop gls-mqtt-forwarder service on the system.
 
-</BR>
+<BR/>
 
 ## ``TL;DR`` Minimum setup of the gateway 
 This is minimum task list what has to do to get system up. system will use the DHCP addresses.     
@@ -53,6 +55,14 @@ $ sudo rc-service wpa_supplicant restart
 # -- Check
 $ dmesg
 
+# start pre-configured Awall-firewall
+awall list
+sudo awall activate
+sudo rc-service iptables restart
+
+# check iptables
+sudo iptables -L
+
 # -- Set MQTT host for Gateway and Border Gateway modes
 $ sudo nano /etc/conf.d/gls-mqtt-forwarder
 $ sudo nano /etc/conf.d/gls-mqtt-forwarder-border-gw
@@ -62,7 +72,7 @@ $ sudo nano /etc/conf.d/gls-mqtt-forwarder-border-gw
 #   -b      Border Gateway mode
 #   -r      Relay Gateway Mode
 
-$ sudo ./set_gateway_mode.sh -g
+$ sudo /home/glsbase/set_gateway_mode.sh -g
 
 # -- Check Gateway logs (quit: ctrl + c)
 $ tail -f /var/log/*
@@ -72,7 +82,7 @@ $ sudo reboot now
 ```
 After that fast setup it also good to set at least the time zone and the ntp servers.
 
-</BR>
+<BR/>
 
 ##  Change password of the ``glsbase`` user
 
@@ -97,7 +107,7 @@ $ sudo passwd glsbase
 ```
 glsbase is the only user that can connect GLStation. Root user can't connect the system.
 
-</BR>
+<BR/>
 
 
 ##  Host name
@@ -135,7 +145,7 @@ $ sudo hostname -F /etc/hostname
 
 The hostname will take effect after the next boot.
 
-</BR>
+<BR/>
 
 ##  Network configurations
 
@@ -167,7 +177,7 @@ iface eth0 inet dhcp
 iface wlan0 inet dhcp
 iface wlan0 inet dhcp
 ```
-> **Note:** </BR> The MAC address is a predefined setting and does not require any user action.
+> **Note:** <BR/> The MAC address is a predefined setting and does not require any user action.
 The eth0 interface has a generated locally administered unicast MAC addresss (Luckfox Pico has a dynamic MAC address on eth0 by default). MAC address is set on the first boot after flashing the firmware. A locally administered unicast MAC address is generated for eth0 interface by using code below:
 >```
 > printf '%02x' $((0x$(od /dev/urandom -N1 -t x1 -An | cut -c 2-) & 0xFE | 0x02)); od /dev/urandom -N5 -t x1 -An | sed 's/ /:/g'
@@ -179,7 +189,7 @@ More information about MAC address:
 * [How to generate random MAC][3]
 * [Generate a random MAC address from the Linux command line][4] 
 
-</BR>
+<BR/>
 
 The name server configuration should be set in ``/etc/resolv.conf`` file if static Ethernet address will be set on to GLStation.
 
@@ -190,9 +200,9 @@ $ sudo nano /etc/resolv.conf
 nameserver 192.168.1.1
 ```
 
-> **Please,** </BR> see the more information on the [Alpine - Configure Networking][5] guide.
+> **Please,** <BR/> see the more information on the [Alpine - Configure Networking][5] guide.
 
-</BR>
+<BR/>
 
 WLAN password setting is in the ``/etc/wpa_supplicant/wpa_supplicant.conf`` file. Salted password setup can be done using the command below.
 
@@ -223,48 +233,142 @@ $ sudo rc-service wpa_supplicant restart
 $ dmesg
 ```
 
-> **Please,** </BR> see the more details about WLAN on the [Alpine - wpa_supplicant][6] guide.
+> **Please,** <BR/> see the more details about WLAN on the [Alpine - wpa_supplicant][6] guide.
 
-</BR>
+<BR/>
+
+## Awall - firewall
+
+Guides:
+- [Alpine Wall User’s Guide](https://git.alpinelinux.org/awall/about/)
+- [How-To Alpine Wall](https://wiki.alpinelinux.org/wiki/How-To_Alpine_Wall)
+- [How To Set Up a Firewall with Awall on Alpine Linux](https://www.cyberciti.biz/faq/how-to-set-up-a-firewall-with-awall-on-alpine-linux/)
+- [How To Set Up a Firewall with Awall on Alpine Linux](https://www.ubuntumint.com/setup-awall-firewall-alpine-linux/)
+
+Pre-defined configuration files: 
+- /etc/awall/optional/glstation.json
+- /etc/awall/optional/ping.json
+
+Commands:
+
+```
+## List setup
+awall list
+
+# Setup
+sudo awall enable glstation
+sudo awall disable glstation
+
+sudo awall enable ping
+sudo awall disable ping
+
+# Activate setup
+sudo awall activate
+
+sudo rc-service iptables start
+sudo rc-srvice iptables stop
+
+# List a active iptables setup.
+sudo iptables -L
+
+```
+
+Pre-defined gslsation awall firewall setup allows following services.
+
+Incoming:
+- ssh_glstation_in
+- mdns
+
+Outgoing:
+- dhcp
+- mqtt 
+- mqtt_tsl_out
+- mdns
+- ssh_glstation_out
+- http 
+- https
+- dns
+- ntp 
+
+Please, see port details in the ``/etc/awall/optionl/glstation.json`` file.
+
+<BR/>
+
+## Syslog-ng
+
+Guides:
+- [syslog-ng](https://wiki.archlinux.org/title/Syslog-ng)
+- [gitHub - syslog-ng ](https://github.com/syslog-ng/syslog-ng)
+
+Commands:
+
+```
+/var/log
+    auth.log
+    cron.log
+    error.log
+    kern.log
+    mail.log
+    messages
+
+tail -f /var/log/messages
+```
+
+<BR/>
 
 ##  Open-RC services on GLStation
 
 GLStation has following pre-defined main services running. All services should be in ``Started`` state when system runs normally.
 
 ```
-$ rc-status
+$ rc-status --all
 ```
 ```
+Runlevel: boot
+ sysfs                                                                [  started  ]
+ devfs                                                                [  started  ]
+ hwclock                                                              [  started  ]
+ syslog-ng                                                            [  started  ]
+ wpa_supplicant                                           [  started 17:18:10 (0) ]
+ networking                                                           [  started  ]
+ procfs                                                               [  started  ]
 Runlevel: default
- sshd                                                                       [  started  ]
- swap                                                                       [  started  ]
- gpsd                                                                       [  started  ]
- udev-postmount                                                             [  started  ]
- bluetooth                                                                  [  started  ]
- local                                                                      [  started  ]
- gls-concentratord                                                          [  started  ]
- gls-bluetooth                                                              [  started  ]
- gls-bt-gatt                                                                [  started  ]
- crond                                                                      [  started  ]
- gls-mqtt-forwarder                                                         [  started  ]
+ swap                                                                 [  started  ]
+ iptables                                                             [  started  ]
+ avahi-daemon                                                         [  started  ]
+ udev-postmount                                                       [  started  ]
+ bluetooth                                                            [  started  ]
+ gpsd                                                                 [  started  ]
+ sshd                                                                 [  started  ]
+ local                                                                [  started  ]
+ gls-bluetooth                                                        [  started  ]
+ crond                                                                [  started  ]
+ gls-concentratord                                                    [  started  ]
+ gls-mqtt-forwarder                                                   [  started  ]
+ gls-bt-gatt                                                          [  started  ]
+Runlevel: nonetwork
+Runlevel: shutdown
+Runlevel: sysinit
+ udev                                                                 [  started  ]
+ udev-trigger                                                         [  started  ]
+ udev-settle                                                          [  started  ]
 Dynamic Runlevel: hotplugged
 Dynamic Runlevel: needed/wanted
- modules                                                                    [  started  ]
- fsck                                                                       [  started  ]
- root                                                                       [  started  ]
- localmount                                                                 [  started  ]
- dbus                                                                       [  started  ]
- loopback                                                                   [  started  ]
- hostname                                                                   [  started  ]
+ modules                                                              [  started  ]
+ loopback                                                             [  started  ]
+ fsck                                                                 [  started  ]
+ root                                                                 [  started  ]
+ localmount                                                           [  started  ]
+ hostname                                                             [  started  ]
+ dbus                                                                 [  started  ]
 Dynamic Runlevel: manual
-
 ```
 
 Learn more about service management: 
 * [Alpine - Working with OpenRC][7]
 * [OpenRC][8]
 
-</BR>
+<BR/>
 
 ##  Time zone settings
 
@@ -283,7 +387,7 @@ Check timezone and date.
 ```
 $ date
 ```
-</BR>
+<BR/>
 
 ##  ntpd time server setup
 
@@ -302,7 +406,7 @@ server 3.fi.pool.ntp.org
 server europe.pool.ntp.org
 ```
 
-</BR>
+<BR/>
 
 ##  Crontab schedules
 
@@ -323,7 +427,7 @@ sudo crontab -l
 20      4       *       *       0       reboot now  2>&1
 ```
 
-</BR>
+<BR/>
 
 Edit crontab schedules.
 ```
@@ -331,7 +435,7 @@ sudo EDITOR=nano crontab -e
 ```
 
 
-</BR>
+<BR/>
 
 ## Bluetooth GATT service
 
@@ -355,7 +459,7 @@ sudo rc-service gls-bt-gatt stop
 sudo rc-service gls-bt-gatt start
 ```
 
-</BR>
+<BR/>
 
 ## SSH config
 
@@ -375,7 +479,7 @@ sudo rc-service sshd start
 Learn more from [Alpine - SSH server][9]
 
 
-</BR>
+<BR/>
 
 ## Cleaning logs
 
@@ -393,7 +497,7 @@ GLStation truncates the following logs every hour. Maximum log size is set to 10
 
 The Crontab log cleaning scrip is in ``/etc/periodic/hourly`` folder.
 
-</BR>
+<BR/>
 
 ## GPSd setup
 
@@ -409,7 +513,7 @@ sudo rc-service gpsd stop
 sudo rc-service gpsd start
 ```
 
-</BR>
+<BR/>
 
 ## gls-concentratord
 
@@ -428,7 +532,7 @@ sudo rc-service gls-concentratord stop
 sudo rc-service gls-concentratord start
 ```
 
-</BR>
+<BR/>
 
 ## gls-mqtt-forwarder
 
@@ -436,7 +540,7 @@ MQTT server (e.g. scheme://host:port where scheme is tcp, ssl or ws) address is 
 -  ``/etc/conf.d/gls-mqtt-forwarder``
 - ``/etc/conf.d/gls-mqtt-forwarder-border-gw``
 
-</BR>
+<BR/>
 
 ```
 $ sudo nano /etc/conf.d/gls-mqtt-forwarder
@@ -467,7 +571,7 @@ sudo rc-service gls-mqtt-forwarder stop
 sudo rc-service gls-mqtt-forwarder start
 ```
 
-</BR>
+<BR/>
 
 ## Service Dependencies: gpsd <- gls-concentratord <- gls-mqtt-forwarder
 
@@ -475,7 +579,7 @@ Gpsd, gls-concentratord, gls-mqtt-forwarder services are dependent on each other
 
 And vice versa if the mqtt-forwarder service starts, the gpsd and concentrator services should start. 
 
-</BR>
+<BR/>
 
 ##  Gateway id
 
@@ -485,7 +589,7 @@ Run the following command to get HT1303 card ``gateway id``
 $ sudo /usr/local/bin/gateway-id
 ```
 
-</BR>
+<BR/>
 
 ## Tools and helppers
 
@@ -528,18 +632,19 @@ The mDNS avahi-tools. Find for example GLStations local addresses.
 
 ```
 $ avahi-browse --browse-domains  --all --resolve --ignore-local  --terminate
+$ avahi-browse -bart
 ```
 
-</BR>
+<BR/>
 
 ## Next step - GLStation goes Mesh
 [**GLStation Mesh**](./GLStation_MESH.md)
 
-</BR>
+<BR/>
 
-</BR>
+<BR/>
 
-</BR>
+<BR/>
 
 <!--Reference material list-->
 ## Resources and reference material
@@ -565,7 +670,7 @@ $ avahi-browse --browse-domains  --all --resolve --ignore-local  --terminate
 [8]: <https://wiki.gentoo.org/wiki/OpenRC#Automatic_respawning_crashed_services> "OpenRC"
 [9]: <https://wiki.alpinelinux.org/wiki/Setting_up_a_SSH_server?ref=angelsanchez.me> "Alpine - SSH server"
 
-</BR>
+<BR/>
 
 ## GLStation guides
 - [GLStation SX1303 - LoRaWAN Base Station](./README.md) guide.
@@ -573,8 +678,8 @@ $ avahi-browse --browse-domains  --all --resolve --ignore-local  --terminate
 - [GLStation Setup](./GLStation_SETUP.md) guide.
 - [GLStation Mesh](./GLStation_MESH.md)
 
-</BR>
-</BR>
-</BR>
+<BR/>
+<BR/>
+<BR/>
 
 **Let's do IoT better**
