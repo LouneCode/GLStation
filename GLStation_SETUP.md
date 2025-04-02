@@ -43,8 +43,8 @@ $ sudo nano /etc/hosts
 $ sudo nano /etc/hostname
 $ sudo hostname -F /etc/hostname
 
-# -- Set WLAN ssid and password
-$ sudo sh -c 'wpa_passphrase "GLStationWiFi" "dontTellMama" > /etc/wpa_supplicant/wpa_supplicant.conf'
+# -- Set WLAN ssid and password. Add a new AP to template wpa_supplicant.conf file.
+$ sudo sh -c 'wpa_passphrase "GLStationWiFi" "dontTellMama" >> /etc/wpa_supplicant/wpa_supplicant.conf'
 
 # -- Check
 $ sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
@@ -53,12 +53,24 @@ $ sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
 $ sudo rc-service wpa_supplicant restart
 
 # -- Check
+$ sudo wpa_cli status
+$ sudo wpa_cli list_n
 $ dmesg
 
 # start pre-configured Awall-firewall
 awall list
+
+# Enable/disable pre-configured setup.
+# sudo avall enable [target]
+
+# Activate firewall setup
 sudo awall activate
-sudo rc-service iptables restart
+
+# Now on you can use folloewing commands to stop and start firewall.
+# Firewall started automatic on boot.
+#
+# sudo rc-service iptables stop
+# sudo rc-service iptables start
 
 # check iptables
 sudo iptables -L
@@ -258,6 +270,9 @@ awall list
 # Setup
 sudo awall enable glstation
 sudo awall disable glstation
+
+# Edit glstation setup
+# sudo nano /etc/awall/optional/glstation.json
 
 sudo awall enable ping
 sudo awall disable ping
@@ -634,6 +649,18 @@ The mDNS avahi-tools. Find for example GLStations local addresses.
 $ avahi-browse --browse-domains  --all --resolve --ignore-local  --terminate
 $ avahi-browse -bart
 ```
+
+Read CPU temperature.
+
+```
+watch echo $(printf "CPU temp: %.2f C" "$(echo "$(cat /sys/class/thermal/thermal_zone*/temp)/1000" | bc -l)")
+```
+
+Update and upgrade packages.
+```
+sudo sh -c 'apk update && apk upgrade'
+```
+
 
 <BR/>
 
