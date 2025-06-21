@@ -23,6 +23,7 @@ This document is a description how to set up the GLStation.
 - ChirpStack mqtt forwarder
 - Service Dependencies: gpsd <- gls-concentratord <- gls-mqtt-forwarder
 - Gateway id
+- WireGuard
 - tools
 
 <BR/>
@@ -53,9 +54,13 @@ $ sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
 $ sudo rc-service wpa_supplicant restart
 
 # -- Check
-$ sudo wpa_cli status
-$ sudo wpa_cli list_n
 $ dmesg
+$ sudo wpa_cli status
+$ sudo wpa_cli list_network
+$ sudo wpa_cli select_network
+
+$ sudo wpa_cli scan
+$ sudo wpa_cli scan_result
 
 # start pre-configured Awall-firewall
 awall list
@@ -63,17 +68,22 @@ awall list
 # Enable/disable pre-configured setup.
 # sudo avall enable [target]
 
-# Activate firewall setup
-sudo awall activate
+# Check at first iptables, ip6tables services are running
+# rc-status 
+# Activate firewall setup if a new awall target is enabled in a previous task. 
+# sudo awall activate
 
-# Now on you can use folloewing commands to stop and start firewall.
+# Now on you can use following commands to stop and start firewall.
 # Firewall started automatic on boot.
 #
 # sudo rc-service iptables stop
 # sudo rc-service iptables start
+# sudo rc-service ip6tables stop
+# sudo rc-service ip6tables start
 
 # check iptables
-sudo iptables -L
+sudo iptables -S
+sudo ip6tables -S
 
 # -- Set MQTT host for Gateway and Border Gateway modes
 $ sudo nano /etc/conf.d/gls-mqtt-forwarder
@@ -92,7 +102,7 @@ $ tail -f /var/log/*
 # -- Test Reboot of the gateway
 $ sudo reboot now
 ```
-After that fast setup it also good to set at least the time zone and the ntp servers.
+After installation, it is a good idea to set at least the time zone and ntp service.
 
 <BR/>
 
@@ -105,8 +115,6 @@ Connect GLStation using by SSH terminal. The [GLStation firmware](./INSTALL_FIRM
 ```
 $ ssh -p2210 glsbase@[host IP address]
 ```
-
-
 
 Change user glsbase password. Initial username and password:
 <ul>
@@ -186,7 +194,7 @@ auto wlan0
 # Static MAC address
 iface eth0 inet dhcp
     pre-up ip link set eth0 address 36:26:cf:57:e1:03
-iface wlan0 inet dhcp
+
 iface wlan0 inet dhcp
 ```
 > **Note:** <BR/> The MAC address is a predefined setting and does not require any user action.
@@ -498,7 +506,8 @@ Learn more from [Alpine - SSH server][9]
 
 ## Cleaning logs
 
-GLStation truncates the following logs every hour. Maximum log size is set to 10 MB.
+GLStation backs up the following logs every hour if the maximum log size exceeds 10 MB. The system saves the backup ``logfilename-log.1`` and then truncates the log file. The system has the current log file and one backup of the last approximately 10 MB of previous log data.
+ 
 - /var/log/gls-mqtt-forwarder.log
 - /var/log/gls-concentratord.log
 - /var/log/gls-bt-gatt.log
@@ -606,6 +615,67 @@ $ sudo /usr/local/bin/gateway-id
 
 <BR/>
 
+##  WireGuard Secure Connections
+
+Please plan your WireGuard-secured network first before continuing in this section. There is no ready-made template for a secure management network here, as it is very important that you are familiar with WireGuard networks.  
+
+To enable WireGuard service, first generate private and public keys for the GLStation node.
+
+```
+# Rename key files: glstation-00n.key and glstation-00n.pub files where -00n in -001 ... -250
+wg genkey | sudo tee /etc/wireguard/glstation-00n.key | wg pubkey | sudo tee /etc/wireguard/glstation-00n.pub
+
+sudo chmod go= /etc/wireguard/glstation-001.key
+```
+
+Edit WireGuard configuration file.
+
+```
+sudo nano /etc/wireguard/wg0.conf
+```
+
+Check and edit Awall firewall rules of the wireguard option.
+
+```
+sudo nano /etc/awall/optional/wireguard.json
+awall list
+sudo awall enable wireguard
+sudo awall activate 
+```
+
+Test WireGuard setup.
+
+```
+# WG manual start
+sudo wg-quick up wg0
+
+sudo wg show
+# Use tcpdum for investigating network traffic of the wg0 interface
+sudo tcpdump -i wg0
+
+# WG manual stop
+sudo wg-quick down wg0
+```
+
+To use the WireGuard OpenRC script, you need to create a symbolic link to it with the configuration name (wg0). Check  ``/etc/init.d/wg-quick.wg0`` symbolic link. Create soft link if missing as follows:
+
+```
+ls -lsa /etc/init.d/wg-quick.wg0
+# Create it if it is missing.
+# sudo ln -s /etc/init.d/wg-quick /etc/init.d/wg-quick.wg0
+```
+
+Add WireGuard service and start it.
+
+```
+sudo rc-update add wg-quick.wg0
+sudo rc-service wg-quick.wg0 start
+rc-status
+```
+
+
+<BR/>
+
 ## Tools and helppers
 
 Monitor gls-concentartord, gls-mqtt-forwarder, gls-bt-gatt logs.
@@ -656,7 +726,7 @@ Read CPU temperature.
 watch echo $(printf "CPU temp: %.2f C" "$(echo "$(cat /sys/class/thermal/thermal_zone*/temp)/1000" | bc -l)")
 ```
 
-Update and upgrade packages.
+Update and upgrade Alpine linux packages.
 ```
 sudo sh -c 'apk update && apk upgrade'
 ```
@@ -685,6 +755,7 @@ sudo sh -c 'apk update && apk upgrade'
 * [Alppine - Working with OpenRC][7]
 * [OpenRC][8]
 * [Alpine - SSH server][9]
+* [WireGuard][10]
 
 [1]: <https://wiki.luckfox.com/Luckfox-Pico/Luckfox-Pico-RV1106/Luckfox-Pico-Ultra-W/Luckfox-Pico-quick-start> "GitHub - LuckfoxTECH/luckfox-pico" 
 [2]: <https://wiki.luckfox.com/intro> "Luckfox Wiki" 
@@ -696,6 +767,7 @@ sudo sh -c 'apk update && apk upgrade'
 [7]: <https://docs.alpinelinux.org/user-handbook/0.1a/Working/openrc.html> "Alpine - Working with OpenRC"
 [8]: <https://wiki.gentoo.org/wiki/OpenRC#Automatic_respawning_crashed_services> "OpenRC"
 [9]: <https://wiki.alpinelinux.org/wiki/Setting_up_a_SSH_server?ref=angelsanchez.me> "Alpine - SSH server"
+[10]: <https://www.wireguard.com/> "WireGuard"
 
 <BR/>
 

@@ -1,16 +1,16 @@
 <mxfile host="65bd71144e">
     <diagram id="sKMdYR7-zpoGA2cVAcW0" name="Sivu-1">
-        <mxGraphModel dx="1498" dy="442" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="none" math="0" shadow="0">
+        <mxGraphModel dx="2137" dy="852" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="none" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
                 <mxCell id="23" value="" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=#E6E6E6;" parent="1" vertex="1">
-                    <mxGeometry x="-40" y="50" width="1380" height="610" as="geometry"/>
+                    <mxGeometry x="-40" y="50" width="1380" height="620" as="geometry"/>
                 </mxCell>
                 <mxCell id="2" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;GLStation SX1303&lt;/b&gt;&lt;/font&gt;" style="html=1;dropTarget=0;whiteSpace=wrap;verticalAlign=top;strokeWidth=3;strokeColor=#1b93ce;fontColor=#1B93CE;" parent="1" vertex="1">
-                    <mxGeometry x="286" y="120" width="490" height="460" as="geometry"/>
+                    <mxGeometry x="286" y="120" width="490" height="490" as="geometry"/>
                 </mxCell>
-                <mxCell id="15" value="USB:&lt;br&gt;&amp;nbsp;Up-/downlink&lt;br&gt;&amp;nbsp;messages" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;exitX=-0.001;exitY=0.164;exitDx=0;exitDy=0;startArrow=block;startFill=1;exitPerimeter=0;" parent="1" source="37" target="38" edge="1">
+                <mxCell id="15" value="USB:&lt;br&gt;&amp;nbsp;Up-/downlink&lt;br&gt;&amp;nbsp;messages" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;exitX=-0.003;exitY=0.144;exitDx=0;exitDy=0;startArrow=block;startFill=1;exitPerimeter=0;edgeStyle=orthogonalEdgeStyle;" parent="1" source="37" target="38" edge="1">
                     <mxGeometry x="0.0952" y="-17" width="80" relative="1" as="geometry">
                         <mxPoint x="149" y="233" as="sourcePoint"/>
                         <mxPoint x="295" y="253" as="targetPoint"/>
@@ -173,7 +173,7 @@
                         <mxPoint as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="81" value="UART&lt;br&gt;NMEA" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;exitX=0;exitY=0.25;exitDx=0;exitDy=0;startArrow=block;startFill=1;" parent="1" edge="1">
+                <mxCell id="81" value="UART&lt;br&gt;NMEA" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;exitX=0;exitY=0.25;exitDx=0;exitDy=0;startArrow=block;startFill=1;edgeStyle=orthogonalEdgeStyle;" parent="1" edge="1">
                     <mxGeometry x="0.0952" y="-6" width="80" relative="1" as="geometry">
                         <mxPoint x="576" y="346.5" as="sourcePoint"/>
                         <mxPoint x="492" y="346.5" as="targetPoint"/>
@@ -184,7 +184,7 @@
                     <mxGeometry x="576" y="170" width="184" height="230" as="geometry"/>
                 </mxCell>
                 <mxCell id="37" value="Luckfox Pico Ultra SBC" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;container=0;" parent="1" vertex="1">
-                    <mxGeometry x="576" y="170" width="184" height="350" as="geometry"/>
+                    <mxGeometry x="576" y="170" width="184" height="400" as="geometry"/>
                 </mxCell>
                 <mxCell id="4" value="Concentratord&lt;br&gt;app" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;strokeColor=#B3B3B3;container=0;" parent="1" vertex="1">
                     <mxGeometry x="597.03" y="205.5" width="126.17" height="54.5" as="geometry"/>
@@ -204,9 +204,9 @@
                 <mxCell id="86" value="" style="verticalLabelPosition=bottom;shadow=0;dashed=0;align=center;html=1;verticalAlign=top;shape=mxgraph.electrical.radio.aerial_-_antenna_1;labelBackgroundColor=none;strokeColor=#B3B3B3;strokeWidth=3;fontSize=14;fontColor=#1B93CE;fillColor=default;" parent="1" vertex="1">
                     <mxGeometry x="842" y="310" width="40" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="88" value="WLAN / Bluetooth" style="endArrow=none;html=1;exitX=0.995;exitY=0.543;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="37" edge="1">
+                <mxCell id="88" value="WLAN / Bluetooth" style="endArrow=none;html=1;" parent="1" edge="1">
                     <mxGeometry x="0.4521" y="-10" width="50" height="50" relative="1" as="geometry">
-                        <mxPoint x="959.5" y="357" as="sourcePoint"/>
+                        <mxPoint x="760" y="360" as="sourcePoint"/>
                         <mxPoint x="862" y="350" as="targetPoint"/>
                         <Array as="points">
                             <mxPoint x="860" y="360"/>
@@ -214,8 +214,11 @@
                         <mxPoint as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="89" value="Gateway Mesh" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;fillColor=default;strokeColor=#B3B3B3;container=0;" vertex="1" parent="1">
+                <mxCell id="89" value="Gateway Mesh" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;fillColor=default;strokeColor=#B3B3B3;container=0;" parent="1" vertex="1">
                     <mxGeometry x="597.03" y="328" width="126.17" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="90" value="WireGuard VPN connections" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;fillColor=default;strokeColor=#B3B3B3;container=0;" vertex="1" parent="1">
+                    <mxGeometry x="597.03" y="505" width="126.17" height="50" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

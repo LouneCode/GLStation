@@ -29,6 +29,7 @@ Interfaces
 - WLAN
 - Bluetooth
 - Serial console intarface
+- WireGuard secure network
 
 Software:
 - Lightweight Alpine linux firmware for the GLStation SX1303
@@ -65,6 +66,17 @@ GLStation gateways create a robust and scalable network by leveraging multi-hop 
 
  Please refer to the [GLStation Mesh](./GLStation_MESH.md) documentation to learn more about the features provided.
 
+</BR>
+
+## GLStation Management Network
+
+GLStation has an inbuild robust VPN for state-of-the-art secure connections. 
+
+<figure>
+    <img src="pic\GLStation_managment_network.png" alt="GLStation"  width=800>
+    <figcaption><a href="https://www.wireguard.com/" target="_blank">Ready for Fast, Modern, Secure WireGuard tunnels</a></figcaption>
+
+</figure>
 
 
 </BR>
@@ -90,15 +102,17 @@ GLStation gateways create a robust and scalable network by leveraging multi-hop 
 * [ChirpStack open-source LoRaWAN Network Server][6] 
 * [ChirpStack Gateway Mesh][7]
 * [GLSensor tracker demo][8] 
+* [WireGuard][9]
 
 [1]: <https://wiki.luckfox.com/Luckfox-Pico/Luckfox-Pico-RV1106/Luckfox-Pico-Ultra-W/Luckfox-Pico-quick-start> "Luckfox Pico Ultra W with POE" 
 [2]: <https://www.elecrow.com/lr1302-868m-915m-lorawan-hat-for-rpi-sx1302-long-range-module-support-rpi-1-2-3-4-5-series.html> "LR1302 868M LoRaWAN hat" 
 [3]: <https://resource.heltec.cn/download/HT-1303/HT-1303(Rev.1.2).pdf> "HT1303"
 [4]: <https://github.com/chirpstack/chirpstack-concentratord> "ChirpStack consentratord"
 [5]: <https://github.com/chirpstack/chirpstack-mqtt-forwarder> "ChirpStack MQTT Forwarder"
-[6]: <https://www.chirpstack.io/docs/index.html> "ChirpStack open-source LoRaWAN Network Server"
+[6]: <https://www.chirpstack.io/docs/> "ChirpStack open-source LoRaWAN Network Server"
 [7]: <https://github.com/chirpstack/chirpstack-gateway-mesh> "ChirpStack Gateway Mesh"
 [8]: <https://glsensor.glsolutions.fi/gls/e89a9f76-2455-44dd-b44b-c93fa8f0c54a?q=2025> "GLSensor tracker demo"
+[9]: <https://www.wireguard.com/> "WireGuard"
 
 </BR>
 

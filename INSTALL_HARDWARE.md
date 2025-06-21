@@ -113,7 +113,7 @@ Adapter functions:
 GLStation adapter Schemantic
 
 <figure>
-    <img src="pic/Adapter_shemantic.png" alt="Scemantic of the adapter"  width="600">
+    <img src="pic/Adapter_schemantic.png" alt="Scemantic of the adapter"  width="600">
     <!--figcaption>Scemantic of the adapter.</figcaption-->
 </figure>
 
